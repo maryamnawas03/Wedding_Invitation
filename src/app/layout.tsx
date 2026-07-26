@@ -44,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfair.variable} ${pinyon.variable} ${jakarta.variable} scroll-smooth`}>
-      <body className="font-sans antialiased text-secondary-dark bg-nude overflow-x-hidden">
+      <body className="font-sans antialiased text-gray-dark bg-cream overflow-x-hidden">
         {children}
       </body>
     </html>

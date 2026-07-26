@@ -1,59 +1,54 @@
 "use client";
 
 import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import SplashScreen from "@/components/SplashScreen";
-import FlowerPetals from "@/components/FlowerPetals";
-import AudioPlayer from "@/components/AudioPlayer";
-import Hero from "@/components/Hero";
-import Countdown from "@/components/Countdown";
-import Welcome from "@/components/Welcome";
-import Venue from "@/components/Venue";
-import DressCode from "@/components/DressCode";
-import RSVP from "@/components/RSVP";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { OpeningEnvelope } from "@/components/OpeningEnvelope";
+import { HeroSection } from "@/components/HeroSection";
+import { TimelineSection } from "@/components/TimelineSection";
+import { VenueSection } from "@/components/VenueSection";
+import { DressThemeSection } from "@/components/DressThemeSection";
+import { RsvpSection } from "@/components/RsvpSection";
+import { FooterSection } from "@/components/FooterSection";
+import { FloatingActions } from "@/components/FloatingActions";
 
 export default function Home() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isEnvelopeOpened, setIsEnvelopeOpened] = useState(false);
 
-  const handleOpenInvitation = () => {
-    setShowSplash(false);
-    setIsAudioPlaying(true); // Automatically starts background music once invitation is opened
-  };
+  // Framer Motion Scroll Progress Line at top of screen
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   return (
-    <main className="relative min-h-screen selection:bg-rosegold-light selection:text-rosegold-dark">
-      <AnimatePresence mode="wait">
-        {showSplash ? (
-          <SplashScreen key="splash-screen" onOpen={handleOpenInvitation} />
-        ) : (
-          <motion.div
-            key="main-content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2 }}
-            className="relative"
-          >
-            {/* Ambient Falling Flower Petals Overlay across all sections */}
-            <FlowerPetals />
+    <main className="relative min-h-screen bg-cream selection:bg-salmon-200 selection:text-brown-dark">
+      {/* Top Scroll Progress Indicator Line */}
+      {isEnvelopeOpened && (
+        <motion.div
+          className="fixed top-0 left-0 right-0 h-1 bg-salmon z-50 origin-left"
+          style={{ scaleX }}
+        />
+      )}
 
-            {/* Background floating music controller */}
-            <AudioPlayer isPlaying={isAudioPlaying} setIsPlaying={setIsAudioPlaying} />
+      {/* Interactive Envelope Overlay */}
+      <OpeningEnvelope onOpen={() => setIsEnvelopeOpened(true)} />
 
-            {/* Scrollable sections */}
-            <Hero />
-            <Countdown />
-            <Welcome />
-            <Venue />
-            <DressCode />
-            <RSVP />
-            <Contact />
-            <Footer />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Full Digital Invitation Page Journey */}
+      <div
+        className={`transition-opacity duration-1000 ${
+          isEnvelopeOpened ? "opacity-100" : "opacity-0 h-screen overflow-hidden"
+        }`}
+      >
+        <HeroSection />
+        <TimelineSection />
+        <VenueSection />
+        <DressThemeSection />
+        <RsvpSection />
+        <FooterSection />
+        <FloatingActions />
+      </div>
     </main>
   );
 }
