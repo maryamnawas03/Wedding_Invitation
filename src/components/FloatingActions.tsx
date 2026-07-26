@@ -1,12 +1,56 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, MessageCircle, CalendarCheck, Volume2, VolumeX } from "lucide-react";
 import { weddingData } from "@/data/weddingData";
 
-export const FloatingActions: React.FC = () => {
+interface FloatingActionsProps {
+  autoPlayAudio?: boolean;
+}
+
+export const FloatingActions: React.FC<FloatingActionsProps> = ({ autoPlayAudio }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Initialize HTML5 Audio object with ambient track
+    audioRef.current = new Audio(
+      "https://pub-4dc8201144ca418fb604349c73e8c724.r2.dev/Einaudi_%20Divenire%20(1)%20(1).mp3"
+    );
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.5;
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (autoPlayAudio && audioRef.current) {
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.log("Audio autoplay prevented by browser:", err));
+    }
+  }, [autoPlayAudio]);
+
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.log("Audio play error:", err));
+    }
+  };
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -17,40 +61,38 @@ export const FloatingActions: React.FC = () => {
 
   const handleWhatsAppShare = () => {
     const text = encodeURIComponent(
-      `You're invited to the Wedding Reception of ${weddingData.groomName} & ${weddingData.brideName} on ${weddingData.displayDate} at ${weddingData.venue.name}, ${weddingData.venue.city}.`
+      `You are invited to the Wedding Reception of ${weddingData.groomName} & ${weddingData.brideName} on ${weddingData.displayDate} at ${weddingData.venue.name}, ${weddingData.venue.city}.`
     );
     window.open(`https://wa.me/?text=${text}`, "_blank");
-  };
-
-  const toggleMusic = () => {
-    setIsPlaying((prev) => !prev);
-    // Audio playback toggle logic hooks into ambient nasheed track
   };
 
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3 items-end">
       <AnimatePresence>
-        {/* Floating Quick Action Buttons */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="flex flex-col gap-2.5 items-center bg-cream/90 backdrop-blur-md p-2 rounded-full border border-salmon-200/50 shadow-luxury"
         >
-          {/* Play Nasheed Ambient Toggle */}
+          {/* Circular Floating Audio Toggle Button (matching reference site) */}
           <button
-            onClick={toggleMusic}
-            title={isPlaying ? "Mute Nasheed" : "Play Nasheed"}
-            className={`p-3 rounded-full transition-all duration-300 ${
+            onClick={toggleAudio}
+            title={isPlaying ? "Mute Background Music" : "Play Background Music"}
+            className={`p-3.5 rounded-full transition-all duration-300 ${
               isPlaying
-                ? "bg-salmon text-white shadow-salmon-glow"
+                ? "bg-brown-dark text-white shadow-salmon-glow"
                 : "bg-cream-dark text-brown-dark hover:bg-salmon-100"
             }`}
           >
-            {isPlaying ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+            {isPlaying ? (
+              <Volume2 className="w-5 h-5 animate-pulse text-salmon-200" />
+            ) : (
+              <VolumeX className="w-5 h-5 text-gray" />
+            )}
           </button>
 
-          {/* Quick Google Maps Directions */}
+          {/* Directions Button */}
           <a
             href={weddingData.venue.googleMapsUrl}
             target="_blank"
@@ -61,7 +103,7 @@ export const FloatingActions: React.FC = () => {
             <MapPin className="w-5 h-5" />
           </a>
 
-          {/* WhatsApp Quick Share */}
+          {/* WhatsApp Share Button */}
           <button
             onClick={handleWhatsAppShare}
             title="Share via WhatsApp"
@@ -70,7 +112,7 @@ export const FloatingActions: React.FC = () => {
             <MessageCircle className="w-5 h-5" />
           </button>
 
-          {/* RSVP Direct Jump */}
+          {/* RSVP Quick Jump Button */}
           <button
             onClick={() => scrollToSection("rsvp")}
             title="RSVP Now"

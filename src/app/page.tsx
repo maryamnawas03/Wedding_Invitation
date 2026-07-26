@@ -47,7 +47,7 @@ export default function Home() {
         <DressThemeSection />
         <RsvpSection />
         <FooterSection />
-        <FloatingActions />
+        <FloatingActions autoPlayAudio={isEnvelopeOpened} />
       </div>
     </main>
   );
