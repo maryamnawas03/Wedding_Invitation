@@ -43,6 +43,7 @@ const config: Config = {
       },
       fontFamily: {
         serif: ["var(--font-playfair)", "serif"],
+        cinzel: ["var(--font-cinzel)", "Georgia", "serif"],
         script: ["var(--font-pinyon)", "cursive"],
         sans: ["var(--font-jakarta)", "sans-serif"],
       },
