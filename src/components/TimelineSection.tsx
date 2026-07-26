@@ -16,7 +16,7 @@ const iconMap: Record<string, React.ElementType> = {
 
 export const TimelineSection: React.FC = () => {
   return (
-    <section className="relative py-20 px-4 bg-cream-light overflow-hidden">
+    <section id="timeline" className="relative py-20 px-4 bg-cream-light overflow-hidden scroll-mt-6">
       <div className="max-w-xl mx-auto text-center mb-12">
         <p className="text-xs uppercase tracking-[0.3em] text-brown-400 font-sans font-semibold mb-2">
           Program Schedule
