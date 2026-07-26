@@ -16,11 +16,11 @@ export const OpeningEnvelope: React.FC<OpeningEnvelopeProps> = ({ onOpen }) => {
   const handleTapToOpen = () => {
     if (isOpen) return;
     setIsOpen(true);
+    onOpen();
 
-    // Smooth unfolding reveal delay before unmounting screen overlay
+    // Delay unmounting screen overlay until fade-out animation completes
     setTimeout(() => {
       setIsDismissed(true);
-      onOpen();
     }, 1200);
   };
 
@@ -30,11 +30,10 @@ export const OpeningEnvelope: React.FC<OpeningEnvelopeProps> = ({ onOpen }) => {
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 1 }}
-        animate={isOpen ? { opacity: 0, scale: 1.05 } : { opacity: 1, scale: 1 }}
+        animate={isOpen ? { opacity: 0, scale: 1.05, pointerEvents: "none" } : { opacity: 1, scale: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         onClick={handleTapToOpen}
-        onTouchStart={handleTapToOpen}
         className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-cream px-6 py-12 cursor-pointer select-none overflow-hidden"
       >
         {/* Soft floating background light blur */}
