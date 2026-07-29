@@ -92,9 +92,9 @@ export const OpeningEnvelope: React.FC<OpeningEnvelopeProps> = ({ onStartOpen, o
     if (!useFallback && videoRef.current) {
       setPhase("playing");
       try {
-        // Unmute the video on play gesture
-        videoRef.current.muted = false;
-        // Play the pre-rendered envelope video
+        // Keep video muted — BGM nasheed handles all audio
+        videoRef.current.muted = true;
+        // Play the pre-rendered envelope video (silent)
         await videoRef.current.play();
       } catch (err) {
         console.warn("Video playback blocked or failed, switching to 3D CSS fallback:", err);

@@ -15,6 +15,9 @@ export const RsvpSection: React.FC = () => {
     specialNote: "",
   });
 
+  // Separate display value so the field can be fully cleared during typing
+  const [guestCountInput, setGuestCountInput] = useState("1");
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -201,10 +204,22 @@ export const RsvpSection: React.FC = () => {
                     <input
                       type="number"
                       min="1"
-                      value={formData.guestCount}
-                      onChange={(e) =>
-                        setFormData({ ...formData, guestCount: Math.max(1, parseInt(e.target.value) || 1) })
-                      }
+                      value={guestCountInput}
+                      onChange={(e) => {
+                        // Allow free typing — store raw string so field can be cleared
+                        setGuestCountInput(e.target.value);
+                        const parsed = parseInt(e.target.value);
+                        if (!isNaN(parsed) && parsed >= 1) {
+                          setFormData({ ...formData, guestCount: parsed });
+                        }
+                      }}
+                      onBlur={() => {
+                        // On focus loss, snap to minimum 1 if empty or invalid
+                        const parsed = parseInt(guestCountInput);
+                        const safe = isNaN(parsed) || parsed < 1 ? 1 : parsed;
+                        setGuestCountInput(String(safe));
+                        setFormData({ ...formData, guestCount: safe });
+                      }}
                       placeholder="e.g. 4"
                       className="w-full pl-10 pr-4 py-3 rounded-xl bg-cream border border-salmon-200/50 text-sm font-sans text-brown-dark placeholder-brown-300 focus:outline-none focus:border-salmon transition-colors"
                     />
