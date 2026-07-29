@@ -28,6 +28,22 @@ export const FooterSection: React.FC = () => {
           </p>
         </motion.div>
 
+        {/* Watercolor Couple Illustration – Transparent Background */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mx-auto w-52 h-56 flex items-center justify-center"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/couple_img_2.png"
+            alt="Akram & Maryam Illustration"
+            className="w-full h-full object-contain drop-shadow-sm"
+          />
+        </motion.div>
+
         {/* Thank You Note */}
         <motion.div
           initial={{ opacity: 0 }}

@@ -13,6 +13,7 @@ import { FloatingActions } from "@/components/FloatingActions";
 
 export default function Home() {
   const [isEnvelopeOpened, setIsEnvelopeOpened] = useState(false);
+  const [hasStartedOpening, setHasStartedOpening] = useState(false);
 
   // Framer Motion Scroll Progress Line at top of screen
   const { scrollYProgress } = useScroll();
@@ -33,7 +34,10 @@ export default function Home() {
       )}
 
       {/* Interactive Envelope Overlay */}
-      <OpeningEnvelope onOpen={() => setIsEnvelopeOpened(true)} />
+      <OpeningEnvelope 
+        onStartOpen={() => setHasStartedOpening(true)}
+        onOpen={() => setIsEnvelopeOpened(true)} 
+      />
 
       {/* Full Digital Invitation Page Journey */}
       <div
@@ -47,7 +51,7 @@ export default function Home() {
         <DressThemeSection />
         <RsvpSection />
         <FooterSection />
-        <FloatingActions autoPlayAudio={isEnvelopeOpened} />
+        <FloatingActions autoPlayAudio={hasStartedOpening} />
       </div>
     </main>
   );

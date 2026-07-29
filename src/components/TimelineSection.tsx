@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { weddingData } from "@/data/weddingData";
-import { UserCheck, Sparkles, Utensils, Cake, Heart, Clock } from "lucide-react";
+import { UserCheck, Sparkles, Utensils, Cake, Heart, Clock, Coffee } from "lucide-react";
 
 // Icon lookup dictionary
 const iconMap: Record<string, React.ElementType> = {
@@ -12,6 +12,7 @@ const iconMap: Record<string, React.ElementType> = {
   Utensils,
   Cake,
   Heart,
+  Coffee,
 };
 
 export const TimelineSection: React.FC = () => {

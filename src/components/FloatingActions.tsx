@@ -14,27 +14,31 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({ autoPlayAudio 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Initialize HTML5 Audio object with ambient track
-    audioRef.current = new Audio(
-      "https://pub-4dc8201144ca418fb604349c73e8c724.r2.dev/Einaudi_%20Divenire%20(1)%20(1).mp3"
-    );
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.5;
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
+    if (typeof window !== "undefined") {
+      if (!(window as any).weddingAudio) {
+        (window as any).weddingAudio = new Audio(
+          "/assets/bgm_nasheed.mp3"
+        );
+        (window as any).weddingAudio.loop = true;
+        (window as any).weddingAudio.volume = 0.5;
       }
-    };
+      audioRef.current = (window as any).weddingAudio;
+      if (!(window as any).weddingAudio.paused) {
+        setIsPlaying(true);
+      }
+    }
   }, []);
 
   useEffect(() => {
     if (autoPlayAudio && audioRef.current) {
-      audioRef.current
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => console.log("Audio autoplay prevented by browser:", err));
+      if (audioRef.current.paused) {
+        audioRef.current
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch((err) => console.log("Audio autoplay prevented by browser:", err));
+      } else {
+        setIsPlaying(true);
+      }
     }
   }, [autoPlayAudio]);
 

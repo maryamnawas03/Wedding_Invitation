@@ -45,23 +45,25 @@ export const DressThemeSection: React.FC = () => {
               </p>
             </div>
 
-            {/* Visual Color Swatches */}
-            <div className="flex items-center justify-center gap-4 pt-4 border-t border-salmon-100/60">
+            {/* Visual Color Swatches Grid */}
+            <div className={`grid ${
+              theme.category.includes("Ladies") 
+                ? "grid-cols-3 min-[380px]:grid-cols-4 sm:grid-cols-5" 
+                : "grid-cols-3"
+            } gap-x-3 gap-y-5 pt-6 border-t border-salmon-100/60 justify-items-center`}>
               {theme.colors.map((color) => (
                 <div
                   key={color.name}
+                  title={color.name}
                   className="group relative flex flex-col items-center cursor-pointer"
                 >
                   <div
-                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full transition-transform duration-300 group-hover:scale-110 shadow-sm"
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-transform duration-300 group-hover:scale-110 shadow-md"
                     style={{
                       backgroundColor: color.hex,
                       border: `2px solid ${color.borderHex || color.hex}`,
                     }}
                   />
-                  <span className="text-[10px] font-sans font-medium text-brown-400 mt-2 opacity-80 group-hover:opacity-100 transition-opacity">
-                    {color.name}
-                  </span>
                 </div>
               ))}
             </div>

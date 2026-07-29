@@ -198,19 +198,16 @@ export const RsvpSection: React.FC = () => {
                   </label>
                   <div className="relative">
                     <Users className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brown-300" />
-                    <select
+                    <input
+                      type="number"
+                      min="1"
                       value={formData.guestCount}
                       onChange={(e) =>
-                        setFormData({ ...formData, guestCount: parseInt(e.target.value) })
+                        setFormData({ ...formData, guestCount: Math.max(1, parseInt(e.target.value) || 1) })
                       }
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-cream border border-salmon-200/50 text-sm font-sans text-brown-dark focus:outline-none focus:border-salmon transition-colors"
-                    >
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                        <option key={num} value={num}>
-                          {num} {num === 1 ? "Guest" : "Guests"}
-                        </option>
-                      ))}
-                    </select>
+                      placeholder="e.g. 4"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-cream border border-salmon-200/50 text-sm font-sans text-brown-dark placeholder-brown-300 focus:outline-none focus:border-salmon transition-colors"
+                    />
                   </div>
                 </div>
               )}
